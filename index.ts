@@ -2,15 +2,15 @@ import { connect, Channel, ConsumeMessage } from "amqplib";
 import axios from 'axios';
 
 // Definir la clase Pago
-class Pago {
-    idPago: string;
-    cantidad: number;
-    concepto: string;
+class Cita {
+    idCita: number;
+    NombrePaciente: string;
+    Problema: string;
 
-    constructor(idPago: string, cantidad: number, concepto: string) {
-        this.idPago = idPago;
-        this.cantidad = cantidad;
-        this.concepto = concepto;
+    constructor(idCita: number, NombrePaciente: string, Problema: string) {
+        this.idCita = idCita;
+        this.NombrePaciente = NombrePaciente;
+        this.Problema = Problema;
     }
 }
 
@@ -27,17 +27,17 @@ async function main() {
                 console.log('Message received:', payload);
 
             
-                const pago: Pago = JSON.parse(payload);
-                console.log('Pago object:', pago);
+                const cita: Cita = JSON.parse(payload);
+                console.log('Pago object:', cita);
 
                 const dataToSend = {
-                    idFactura: pago.idPago,
-                    pagoid: pago.cantidad
+                    idServicio_Citas: cita.idCita,
+                    descripcion: cita.Problema
                 };
                 console.log("datos a mandar")
                 console.log(dataToSend)
 
-                await axios.post('https://service-payment-8hs5.onrender.com/facturas', dataToSend);
+                await axios.post('https://api-citas-1.onrender.com/agenda', dataToSend);
                 console.log('Payment processed');
             } catch (error) {
                 console.error('Error processing message:', error);
